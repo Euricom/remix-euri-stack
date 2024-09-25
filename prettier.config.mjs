@@ -15,7 +15,7 @@ const config = {
   proseWrap: 'always',
   quoteProps: 'as-needed',
   requirePragma: false,
-  semi: false,
+  semi: true,
   singleAttributePerLine: false,
   singleQuote: true,
   tabWidth: 2,
@@ -45,6 +45,6 @@ const config = {
   plugins: ['prettier-plugin-tailwindcss'],
   tailwindAttributes: ['class', 'className', 'ngClass', '.*[cC]lassName'],
   tailwindFunctions: ['clsx', 'cn'],
-}
+};
 
-export default config
+export default config;
