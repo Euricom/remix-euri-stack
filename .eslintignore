@@ -1,0 +1,5 @@
+node_modules
+
+/public
+/playwright-report
+/server-build

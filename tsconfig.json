@@ -23,6 +23,8 @@
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
     "baseUrl": ".",
+
+    // aliases
     "paths": {
       "@/*": ["./*"]
     },

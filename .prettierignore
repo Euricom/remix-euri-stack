@@ -1,0 +1,13 @@
+node_modules
+
+/build
+.env
+
+/test-results/
+/playwright-report/
+/playwright/.cache/
+/tests/fixtures/email/*.json
+/coverage
+/prisma/migrations
+
+pnpm-lock.yaml
