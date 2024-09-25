@@ -1,8 +1,9 @@
 {
   "name": "my-remix-app",
   "private": true,
-  "sideEffects": false,
   "type": "module",
+  "sideEffects": false,
+  "license": "MIT",
   "scripts": {
     "build": "run-s build:*",
     "build:remix": "remix vite:build",
