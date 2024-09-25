@@ -1,6 +1,7 @@
 node_modules
 
 /build
+/server-build
 .env
 
 /test-results/
@@ -8,6 +9,5 @@ node_modules
 /playwright/.cache/
 /tests/fixtures/email/*.json
 /coverage
-/prisma/migrations
 
 pnpm-lock.yaml
