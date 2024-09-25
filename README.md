@@ -1,1 +1,3 @@
-# remix-euri-stack
+# Euricom Remix Stack
+
+T.B.D
