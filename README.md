@@ -10,7 +10,7 @@
 - [x] Static Types with [TypeScript](https://typescriptlang.org/)
 - [x] UI Components with [Shadcn](https://ui.shadcn.com/)
 - [x] [Sentry](https://sentry.io/) integration for client & server
-- [ ] [Docker](https://docs.docker.com/engine/install) setup for nodejs.
+- [x] [Docker](https://docs.docker.com/engine/install) setup for nodejs.
 - [ ] Unit testing with [Vitest](https://vitest.dev/)
 - [ ] E2E testing with [Playwright](https://playwright.dev/)
 - [ ] Toaster preconfigured with [remix-toast](https://remix.run/resources/remix-toast)

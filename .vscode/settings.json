@@ -1,4 +1,4 @@
 {
-  "cSpell.words": ["clsx", "Euricom", "execa", "healthcheck", "isbot", "typecheck"],
+  "cSpell.words": ["clsx", "Euricom", "execa", "healthcheck", "isbot", "lucide", "tailwindcss", "typecheck"],
   "prettier.configPath": "./prettier.config.mjs"
 }
