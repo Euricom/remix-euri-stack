@@ -16,10 +16,10 @@
 - [x] Has built-in support to prevent CSRF attacks
 - [x] Favicon & site webmanifest
 - [x] Unit testing with [Vitest](https://vitest.dev/) & [MSW](https://mswjs.io/)
+- [x] Global ErrorBoundary
+- [x] 404 Error handling
 - [ ] E2E testing with [Playwright](https://playwright.dev/)
 - [ ] Toaster preconfigured with [remix-toast](https://remix.run/resources/remix-toast)
-- [ ] Global ErrorBoundary
-- [ ] 404 Error handling
 - [ ] Form sample based on [conform](https://github.com/edmundhung/conform)
 - [ ] Use [Flat Routes](https://github.com/kiliman/remix-flat-routes)
 - [ ] I18n with [remix-i18next](https://www.npmjs.com/package/remix-i18next)
