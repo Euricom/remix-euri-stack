@@ -2,7 +2,8 @@ import { json, Links, Meta, MetaFunction, Outlet, Scripts, ScrollRestoration, us
 import type { LinksFunction, LoaderFunctionArgs } from '@remix-run/node';
 import { withSentry } from '@sentry/remix';
 import { HoneypotProvider } from 'remix-utils/honeypot/react';
-
+import appleTouchIconAssetUrl from './assets/favicons/apple-touch-icon.png';
+import faviconAssetUrl from './assets/favicons/favicon.svg';
 import { getEnv } from './utils/env.server';
 import { useNonce } from './utils/nonce-provider';
 import { Theme } from './utils/theme.server';
@@ -22,6 +23,14 @@ export const links: LinksFunction = () => [
     rel: 'stylesheet',
     href: 'https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap',
   },
+  { rel: 'icon', type: 'image/svg+xml', href: faviconAssetUrl },
+  { rel: 'apple-touch-icon', href: appleTouchIconAssetUrl },
+  {
+    rel: 'manifest',
+    href: '/site.webmanifest',
+    crossOrigin: 'use-credentials',
+  } as const, // necessary to make typescript happy
+
   { rel: 'stylesheet', href: tailwindUrl },
 ];
 

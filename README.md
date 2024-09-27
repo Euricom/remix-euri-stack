@@ -14,10 +14,10 @@
 - [x] Honeypot security to prevent spam bots to submit forms
 - [x] Icons from [Lucide](https://lucide.dev/icons/)
 - [x] Has built-in support to prevent CSRF attacks
+- [x] Favicon & site webmanifest
 - [ ] Unit testing with [Vitest](https://vitest.dev/)
 - [ ] E2E testing with [Playwright](https://playwright.dev/)
 - [ ] Toaster preconfigured with [remix-toast](https://remix.run/resources/remix-toast)
-- [ ] Favicon & site webmanifest
 - [ ] Global ErrorBoundary
 - [ ] 404 Error handling
 - [ ] Form sample based on [conform](https://github.com/edmundhung/conform)
