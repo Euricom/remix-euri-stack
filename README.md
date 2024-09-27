@@ -15,7 +15,7 @@
 - [x] Icons from [Lucide](https://lucide.dev/icons/)
 - [x] Has built-in support to prevent CSRF attacks
 - [x] Favicon & site webmanifest
-- [ ] Unit testing with [Vitest](https://vitest.dev/)
+- [x] Unit testing with [Vitest](https://vitest.dev/) & [MSW](https://mswjs.io/)
 - [ ] E2E testing with [Playwright](https://playwright.dev/)
 - [ ] Toaster preconfigured with [remix-toast](https://remix.run/resources/remix-toast)
 - [ ] Global ErrorBoundary
