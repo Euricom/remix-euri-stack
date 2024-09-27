@@ -102,6 +102,7 @@ See More:
 * https://remix.run/resources/remix-+-hono
 * https://github.com/yusukebe/hono-and-remix-on-vite
 * https://remix.run/resources/remix-fastify
+* https://github.com/kiliman/remix-express-vite-plugin
   
 ### SVG handling
 
