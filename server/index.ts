@@ -6,12 +6,16 @@ import { logger } from 'hono/logger';
 import { remix } from 'remix-hono/handler';
 import { session } from 'remix-hono/session';
 import { cache } from './middlewares';
-import crypto from 'node:crypto';
+import { secureHeaders } from 'hono/secure-headers';
+import { compress } from 'hono/compress';
+import { poweredBy } from 'hono/powered-by';
+import { createCSP } from './csp';
 
-const mode = process.env.NODE_ENV === 'test' ? 'development' : process.env.NODE_ENV;
-const IS_PROD = mode === 'production';
-// const IS_DEV = mode === 'development';
-// const ALLOW_INDEXING = process.env.ALLOW_INDEXING !== 'false';
+const MODE = process.env.NODE_ENV === 'test' ? 'development' : process.env.NODE_ENV;
+const IS_PROD = MODE === 'production';
+const ALLOW_INDEXING = process.env.ALLOW_INDEXING !== 'false';
+const CSP_REPORT_ONLY = process.env.CSP_REPORT_ONLY !== 'false';
+const CSP_REPORT_TO = process.env.CSP_REPORT_TO;
 
 const viteDevServer = IS_PROD
   ? undefined
@@ -48,54 +52,44 @@ app.use('*', cache(60 * 60), serveStatic({ root: IS_PROD ? './build/client' : '.
 app.use('*', logger());
 
 /**
- * add CSP nonce
+ * add compression
  */
-app.use(async (c, next) => {
-  c.set('cspNonce', crypto.randomBytes(16).toString('hex'));
-  await next();
-});
+app.use(compress());
 
-//
-// add compression
-//
-// app.use(compression());
+/**
+ * add X-Robots-Tag to disable indexing
+ */
+if (!ALLOW_INDEXING) {
+  app.use('*', (c, next) => {
+    c.header('X-Robots-Tag', 'noindex, nofollow');
+    return next();
+  });
+}
 
-//
-// add X-Robots-Tag to disable indexing
-//
-// if (!ALLOW_INDEXING) {
-//   app.use((_, res, next) => {
-//     res.set('X-Robots-Tag', 'noindex, nofollow');
-//     next();
-//   });
-// }
-
-// app.use(
-//   helmet({
-//     xPoweredBy: false,
-//     referrerPolicy: { policy: 'same-origin' },
-//     crossOriginEmbedderPolicy: false,
-//     contentSecurityPolicy: {
-//       // NOTE: Remove reportOnly when you're ready to enforce this CSP
-//       reportOnly: true,
-//       directives: {
-//         'connect-src': [
-//           MODE === 'development' ? 'ws:' : null,
-//           process.env.SENTRY_DSN ? '*.sentry.io' : null,
-//           "'self'",
-//         ].filter(Boolean),
-//         'font-src': ["'self'", 'https://fonts.gstatic.com'],
-//         'frame-src': ["'self'"],
-//         'img-src': ["'self'", 'data:'],
-//         // @ts-expect-error
-//         'script-src': ["'strict-dynamic'", "'self'", (_, res) => `'nonce-${res.locals.cspNonce}'`],
-//         // @ts-expect-error
-//         'script-src-attr': [(_, res) => `'nonce-${res.locals.cspNonce}'`],
-//         'upgrade-insecure-requests': null,
-//       } as any,
-//     },
-//   }),
-// );
+/**
+ * add Content Security Policy
+ */
+app.use(
+  '*',
+  secureHeaders({
+    strictTransportSecurity: 'max-age=63072000; includeSubDomains; preload',
+    referrerPolicy: 'same-origin',
+    crossOriginEmbedderPolicy: false,
+    xContentTypeOptions: false,
+    xXssProtection: false,
+    reportingEndpoints: CSP_REPORT_TO
+      ? [
+          {
+            name: 'endpoint-1',
+            url: CSP_REPORT_TO,
+          },
+        ]
+      : undefined,
+    contentSecurityPolicy: CSP_REPORT_ONLY ? undefined : createCSP(CSP_REPORT_ONLY),
+    contentSecurityPolicyReportOnly: CSP_REPORT_ONLY ? createCSP(CSP_REPORT_ONLY) : undefined,
+  }),
+);
+app.use('*', poweredBy());
 
 /**
  * Add session middleware (https://github.com/sergiodxa/remix-hono?tab=readme-ov-file#session-management)
@@ -140,11 +134,12 @@ app.use(async (c, next) => {
   if (error) throw error;
   return remix({
     build,
-    mode,
+    mode: MODE,
     getLoadContext() {
       return {
-        cspNonce: c.get('cspNonce'),
+        cspNonce: c.get('secureHeadersNonce') || '',
         appVersion: IS_PROD ? build.assets.version : 'dev',
+        /* add here more context */
       } satisfies AppLoadContext;
     },
   })(c, next);
@@ -177,6 +172,7 @@ declare module '@remix-run/node' {
      * The app version from the build assets
      */
     readonly appVersion: string;
+    readonly cspNonce: string;
   }
 }
 
@@ -184,7 +180,10 @@ async function getBuild() {
   try {
     const build = viteDevServer
       ? await viteDevServer.ssrLoadModule('virtual:remix/server-build')
-      : await import('../build/server/remix.js');
+      : // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        // eslint-disable-next-line import/no-unresolved
+        await import('../build/server/remix.js');
 
     return { build: build as unknown as ServerBuild, error: null };
   } catch (error) {
