@@ -49,6 +49,7 @@ export default async function handleRequest(...args: DocRequestArgs) {
         [callbackName]: () => {
           const body = new PassThrough();
           responseHeaders.set('Content-Type', 'text/html');
+
           // responseHeaders.append("Server-Timing", timings.toString());
           resolve(
             new Response(createReadableStreamFromReadable(body), {

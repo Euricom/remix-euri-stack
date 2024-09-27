@@ -8,6 +8,8 @@ const schema = z.object({
   // If you plan on using Sentry, uncomment this line
   // SENTRY_DSN: z.string(),
   ALLOW_INDEXING: z.enum(['true', 'false']).optional(),
+  CSP_REPORT_ONLY: z.enum(['true', 'false']).optional(),
+  CSP_REPORT_TO: z.string().optional(),
 });
 
 declare global {
