@@ -2,7 +2,7 @@
 
 ## What's in the stack?
 
-- [x] Custom [Express](https://expressjs.com/) server for production
+- [x] Custom fast [Hono](https://hono.dev/) server for production
 - [x] Security headers and Content Security Policy with nonces
 - [x] Styling with [Tailwind CSS](https://tailwindcss.com/), [clsx](https://www.npmjs.com/package/clsx), and
       [tailwind-merge](https://www.npmjs.com/package/tailwind-merge)
@@ -11,6 +11,8 @@
 - [x] UI Components with [Shadcn](https://ui.shadcn.com/)
 - [x] [Sentry](https://sentry.io/) integration for client & server
 - [x] [Docker](https://docs.docker.com/engine/install) setup for nodejs.
+- [x] Honeypot security to prevent spam bots to submit forms
+- [x] Icons from [Lucide](https://lucide.dev/icons/)
 - [ ] Unit testing with [Vitest](https://vitest.dev/)
 - [ ] E2E testing with [Playwright](https://playwright.dev/)
 - [ ] Toaster preconfigured with [remix-toast](https://remix.run/resources/remix-toast)
@@ -18,7 +20,6 @@
 - [ ] Global ErrorBoundary
 - [ ] 404 Error handling
 - [ ] Form sample based on [conform](https://github.com/edmundhung/conform)
-- [ ] Icons from [Lucide](https://lucide.dev/icons/)
 - [ ] Use [Flat Routes](https://github.com/kiliman/remix-flat-routes)
 - [ ] I18n with [remix-i18next](https://www.npmjs.com/package/remix-i18next)
 - [ ] Improve the DX with [@Epic-web/remember](https://remix.run/resources/@epic-web/remember)
