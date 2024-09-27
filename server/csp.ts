@@ -34,6 +34,5 @@ export function createCSP(reportOnly: boolean) {
   if (process.env.CSP_REPORT_TO) {
     csp.reportUri = process.env.CSP_REPORT_TO;
   }
-  console.log(csp);
   return csp;
 }

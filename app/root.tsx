@@ -1,11 +1,13 @@
 import { json, Links, Meta, MetaFunction, Outlet, Scripts, ScrollRestoration, useLoaderData } from '@remix-run/react';
 import type { LinksFunction, LoaderFunctionArgs } from '@remix-run/node';
 import { withSentry } from '@sentry/remix';
+import { HoneypotProvider } from 'remix-utils/honeypot/react';
 
 import { getEnv } from './utils/env.server';
 import { useNonce } from './utils/nonce-provider';
 import { Theme } from './utils/theme.server';
 import { GeneralErrorBoundary } from './components/error-boundary';
+import { honeypot } from './utils/honeypot.server';
 
 import tailwindUrl from './tailwind.css?url';
 
@@ -32,8 +34,10 @@ export const meta: MetaFunction<typeof loader> = () => {
 };
 
 export async function loader({ context }: LoaderFunctionArgs) {
+  const honeyProps = honeypot.getInputProps();
   return json({
     ENV: getEnv(),
+    honeyProps,
   });
 }
 
@@ -93,11 +97,11 @@ function App() {
 }
 
 function AppWithProviders() {
-  // const data = useLoaderData<typeof loader>();
+  const data = useLoaderData<typeof loader>();
   return (
-    // <HoneypotProvider {...data.honeyProps}>
-    <App />
-    // </HoneypotProvider>
+    <HoneypotProvider {...data.honeyProps}>
+      <App />
+    </HoneypotProvider>
   );
 }
 

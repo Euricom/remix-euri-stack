@@ -36,6 +36,7 @@
     "class-variance-authority": "^0.7.0",
     "close-with-grace": "^2.1.0",
     "clsx": "^2.1.1",
+    "crypto-js": "^4.2.0",
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
     "hono": "^4.6.3",
@@ -44,6 +45,7 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "remix-hono": "^0.0.16",
+    "remix-utils": "^7.7.0",
     "tailwind-merge": "^2.5.2",
     "tailwindcss-animate": "^1.0.7",
     "zod": "^3.23.8"
