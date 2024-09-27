@@ -13,6 +13,7 @@
 - [x] [Docker](https://docs.docker.com/engine/install) setup for nodejs.
 - [x] Honeypot security to prevent spam bots to submit forms
 - [x] Icons from [Lucide](https://lucide.dev/icons/)
+- [x] Has built-in support to prevent CSRF attacks
 - [ ] Unit testing with [Vitest](https://vitest.dev/)
 - [ ] E2E testing with [Playwright](https://playwright.dev/)
 - [ ] Toaster preconfigured with [remix-toast](https://remix.run/resources/remix-toast)
