@@ -38,16 +38,12 @@ COPY --from=builder /srv/.npmrc /srv/.npmrc
 
 # Generated files
 COPY --from=builder /srv/pnpm-lock.yaml /srv/pnpm-lock.yaml
-# COPY --from=builder /srv/dist/runner /srv/dist/runner
-# COPY --from=builder /srv/dist/remix /srv/dist/remix
-COPY --from=builder /srv/server-build /srv/server-build
 COPY --from=builder /srv/build /srv/build
 
 # Install production dependencies and cleanup node_modules.
 RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --prod \
     --frozen-lockfile --ignore-scripts && pnpm prune --prod \
-    --ignore-scripts && pnpm dlx clean-modules clean --yes \
-    "!**/@libsql/**" && chmod +x /srv/server-build/index.js
+    --ignore-scripts && pnpm dlx clean-modules clean --yes "!**/@libsql/**" 
 
 # -----------------------------------------------------------------------------
 # Production image, copy build output files and run the application.
@@ -69,4 +65,4 @@ ENV NODE_ENV=$NODE_ENV HOST=$HOST PORT=$PORT
 USER nonroot:nonroot
 EXPOSE $PORT
 
-CMD ["node", "/srv/server-build/index.js"]
+CMD ["node", "/srv/build/server/index.js"]

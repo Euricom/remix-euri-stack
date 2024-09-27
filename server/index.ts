@@ -1,4 +1,4 @@
-import { serve } from '@hono/node-server';
+import { serve, ServerType } from '@hono/node-server';
 import { serveStatic } from '@hono/node-server/serve-static';
 import { type AppLoadContext, createCookieSessionStorage, type ServerBuild } from '@remix-run/node';
 import { Hono } from 'hono';
@@ -10,6 +10,7 @@ import { secureHeaders } from 'hono/secure-headers';
 import { compress } from 'hono/compress';
 import { poweredBy } from 'hono/powered-by';
 import { createCSP } from './csp';
+import closeWithGrace from 'close-with-grace';
 
 const MODE = process.env.NODE_ENV === 'test' ? 'development' : process.env.NODE_ENV;
 const IS_PROD = MODE === 'production';
@@ -149,8 +150,9 @@ app.use(async (c, next) => {
  * Start the production server
  */
 
+let server: ServerType;
 if (IS_PROD) {
-  serve(
+  server = serve(
     {
       ...app,
       port: Number(process.env.PORT) || 3000,
@@ -160,6 +162,13 @@ if (IS_PROD) {
     },
   );
 }
+
+closeWithGrace(async () => {
+  console.log('[Hono] Called shutdown event');
+  await new Promise((resolve, reject) => {
+    server?.close((e) => (e ? reject(e) : resolve('ok')));
+  });
+});
 
 export default app;
 
