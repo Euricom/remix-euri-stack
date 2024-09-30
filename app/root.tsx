@@ -9,6 +9,8 @@ import { useNonce } from './utils/nonce-provider';
 import { Theme } from './utils/theme.server';
 import { GeneralErrorBoundary } from './components/error-boundary';
 import { honeypot } from './utils/honeypot.server';
+import { i18n } from './utils/i18n.ts'
+import { i18next } from './utils/i18next.server.ts'
 
 import tailwindUrl from './tailwind.css?url';
 
@@ -42,11 +44,13 @@ export const meta: MetaFunction<typeof loader> = () => {
   ];
 };
 
-export async function loader({ context }: LoaderFunctionArgs) {
+export async function loader({ request }: LoaderFunctionArgs) {
+  const locale = await i18next.getLocale(request)
   const honeyProps = honeypot.getInputProps();
   return json({
     ENV: getEnv(),
     honeyProps,
+    locale
   });
 }
 
@@ -54,17 +58,19 @@ function Document({
   children,
   nonce,
   theme = 'light',
+  locale = i18n.fallbackLng,
   env = {},
   allowIndexing = true,
 }: {
   children: React.ReactNode;
   nonce: string;
   theme?: Theme;
+  locale?: string
   env?: Record<string, string>;
   allowIndexing?: boolean;
 }) {
   return (
-    <html lang="en" className={`${theme} h-full overflow-x-hidden`}>
+    <html lang={locale} className={`${theme} h-full overflow-x-hidden`}>
       <head>
         <Meta />
         <meta charSet="utf-8" />
@@ -92,7 +98,7 @@ function App() {
   const nonce = useNonce();
   const allowIndexing = data.ENV.ALLOW_INDEXING !== 'false';
   return (
-    <Document nonce={nonce} allowIndexing={allowIndexing} env={data.ENV}>
+    <Document locale={data.locale} nonce={nonce} allowIndexing={allowIndexing} env={data.ENV}>
       <div className="flex h-screen flex-col">
         <header className="container py-6">
           <h1 className="text-2xl font-bold">Hello Remix</h1>

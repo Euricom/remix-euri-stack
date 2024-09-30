@@ -4,6 +4,7 @@
  * For more information, see https://remix.run/file-conventions/entry.server
  */
 
+import { resolve } from 'path';
 import { PassThrough } from 'node:stream';
 import chalk from 'chalk';
 import * as Sentry from '@sentry/remix';
@@ -13,8 +14,13 @@ import { createReadableStreamFromReadable } from '@remix-run/node';
 import { RemixServer } from '@remix-run/react';
 import { isbot } from 'isbot';
 import { renderToPipeableStream } from 'react-dom/server';
+import { createInstance } from 'i18next';
+import { I18nextProvider, initReactI18next } from 'react-i18next';
+import FSBackend from 'i18next-fs-backend';
 import { getEnv, init } from './utils/env.server';
 import { NonceProvider } from './utils/nonce-provider';
+import { i18n } from './utils/i18n.ts';
+import { i18next } from './utils/i18next.server.ts';
 
 const ABORT_DELAY = 5_000;
 
@@ -34,6 +40,28 @@ export default async function handleRequest(...args: DocRequestArgs) {
 
   const callbackName = isbot(request.headers.get('user-agent')) ? 'onAllReady' : 'onShellReady';
 
+  // First, we create a new instance of i18next so every request will have a
+  // completely unique instance and not share any state
+  const i18nInstance = createInstance();
+  // Then we could detect locale from the request
+  const lng = await i18next.getLocale(request);
+  // And here we detect what namespaces the routes about to render want to use
+  const ns = i18next.getRouteNamespaces(remixContext);
+
+  console.log('lng', lng, ns);
+
+  await i18nInstance
+    .use(initReactI18next)
+    .use(FSBackend)
+    .init({
+      ...i18n,
+      lng,
+      ns,
+      backend: {
+        loadPath: resolve('./public/locales/{{lng}}/{{ns}}.json'),
+      },
+    });
+
   const nonce = loadContext.cspNonce?.toString() ?? '';
   return new Promise((resolve, reject) => {
     let didError = false;
@@ -43,7 +71,9 @@ export default async function handleRequest(...args: DocRequestArgs) {
 
     const { pipe, abort } = renderToPipeableStream(
       <NonceProvider value={nonce}>
-        <RemixServer context={remixContext} url={request.url} nonce={nonce} />
+        <I18nextProvider i18n={i18nInstance}>
+          <RemixServer context={remixContext} url={request.url} nonce={nonce} />
+        </I18nextProvider>
       </NonceProvider>,
       {
         [callbackName]: () => {

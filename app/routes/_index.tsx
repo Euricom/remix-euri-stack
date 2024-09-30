@@ -2,6 +2,8 @@ import type { LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
 import { Button } from '../components/ui/button';
 import { Camera } from 'lucide-react';
 import { useLoaderData } from '@remix-run/react';
+import { useTranslation } from 'react-i18next';
+import { i18next } from '@/app/utils/i18next.server';
 
 export const meta: MetaFunction = () => {
   return [{ title: 'New Remix App' }, { name: 'description', content: 'Welcome to Remix!' }];
@@ -16,11 +18,13 @@ export const meta: MetaFunction = () => {
 //   });
 // };
 
-export const loader = ({ context }: LoaderFunctionArgs) => {
+export const loader = async ({ request, context }: LoaderFunctionArgs) => {
+  const locale = await i18next.getLocale(request);
   console.log('context', context);
   return {
     testString: 'peter',
     testDate: new Date(),
+    locale,
   };
 };
 
