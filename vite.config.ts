@@ -6,6 +6,14 @@ import devServer from '@hono/vite-dev-server';
 import { flatRoutes } from 'remix-flat-routes';
 import esbuild from 'esbuild';
 
+// enable single fetch types
+// see also remix features
+declare module '@remix-run/node' {
+  interface Future {
+    unstable_singleFetch: true;
+  }
+}
+
 export default defineConfig({
   server: {
     port: 3000,
@@ -36,10 +44,14 @@ export default defineConfig({
     process.env.NODE_ENV === 'test'
       ? null
       : remix({
+          // remix feature switches
           future: {
             v3_fetcherPersist: true,
             v3_relativeSplatPath: true,
             v3_throwAbortReason: true,
+            // enable single fetch (ready to v7)
+            // https://remix.run/docs/en/main/guides/single-fetch
+            unstable_singleFetch: true,
           },
           serverBuildFile: 'remix.js',
           ignoredRouteFiles: ['**/*'],

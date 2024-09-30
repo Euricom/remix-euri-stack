@@ -43,7 +43,7 @@ export default async function handleRequest(...args: DocRequestArgs) {
 
     const { pipe, abort } = renderToPipeableStream(
       <NonceProvider value={nonce}>
-        <RemixServer context={remixContext} url={request.url} />
+        <RemixServer context={remixContext} url={request.url} nonce={nonce} />
       </NonceProvider>,
       {
         [callbackName]: () => {
