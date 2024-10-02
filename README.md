@@ -19,7 +19,7 @@
 - [x] Global ErrorBoundary
 - [x] 404 Error handling
 - [x] Remix code snippets
-- [ ] Improve typing with [ts-reset](https://github.com/mattpocock/ts-reset)
+- [x] Improve typing with [ts-reset](https://github.com/mattpocock/ts-reset)
 - [ ] E2E testing with [Playwright](https://playwright.dev/)
 - [ ] Toaster preconfigured with [remix-toast](https://remix.run/resources/remix-toast)
 - [ ] Form sample based on [conform](https://github.com/edmundhung/conform)
